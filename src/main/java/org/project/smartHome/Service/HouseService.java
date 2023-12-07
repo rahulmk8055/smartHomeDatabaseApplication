@@ -49,13 +49,10 @@ class HouseCreate implements Runnable {
 
             }
 
-        }
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
                 System.out.println(String.format("Exception: %s", e.getMessage()));
                 System.out.println();
-        }
-        catch (AuthenticationException e) {
+        } catch (AuthenticationException e) {
             System.out.println("No user has logged in");
         }
 
@@ -83,6 +80,7 @@ class HouseSet implements Runnable {
                     if (rs.next()) {
                         int houseId = rs.getInt("houseId");
                         UserSession.setHouseId(houseId);
+                        System.out.println("House is set");
                     } else {
                         System.out.println("Try Again");
                     }

@@ -1,6 +1,8 @@
 package org.project.smartHome;
 
+import org.project.smartHome.Service.DeviceService;
 import org.project.smartHome.Service.HouseService;
+import org.project.smartHome.Service.RoomService;
 import org.project.smartHome.Service.UserService;
 import picocli.CommandLine;
 
@@ -11,7 +13,7 @@ import java.util.Scanner;
 
 @CommandLine.Command(name = "app", mixinStandardHelpOptions = true,
         description = "A simple CLI application using Picocli.",
-        subcommands = {UserService.class, HouseService.class})
+        subcommands = {UserService.class, HouseService.class, RoomService.class, DeviceService.class})
 public class Application {
 
     public static void main(String[] args) {
