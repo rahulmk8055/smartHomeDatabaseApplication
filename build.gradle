@@ -26,7 +26,7 @@ dependencies {
 
 application {
 //    mainClass = 'org.project.smartHome.Main'
-    mainClass = 'org.project.smartHome.Service.UserService'
+    mainClass = 'org.project.smartHome.Application'
 }
 compileJava {
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
@@ -34,14 +34,11 @@ compileJava {
 
 run {
     standardInput = System.in
-//    if (project.hasProperty('appArgs')) {
-//        args Eval.me(appArgs)
-//    }
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'org.project.smartHome.Service.UserService'
+        attributes 'Main-Class': 'org.project.smartHome.Application'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
