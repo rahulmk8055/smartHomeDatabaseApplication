@@ -2,7 +2,6 @@ package org.project.smartHome.UserSession;
 
 public class UserSession {
     private static String loggedInUser = "rmusalay";
-
     private static int houseId = 1;
 
     public static void setLoggedInUser(String username) {

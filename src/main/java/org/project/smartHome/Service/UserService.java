@@ -1,5 +1,6 @@
 package org.project.smartHome.Service;
 
+import org.project.smartHome.Crons.NotificationCron;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 import picocli.CommandLine;
@@ -9,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @CommandLine.Command(name = "user",
         mixinStandardHelpOptions = true,
@@ -25,6 +28,8 @@ public class UserService {
         description = "create a new user",
         mixinStandardHelpOptions = true)
 class UserCreate implements Runnable {
+
+
     @Override
     public void run() {
         // Do whatever create is supposed to do
@@ -71,6 +76,7 @@ class UserCreate implements Runnable {
         description = "login a user",
         mixinStandardHelpOptions = true)
 class UserLogin implements Runnable {
+    ExecutorService executorService = Executors.newFixedThreadPool(2);
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
@@ -92,6 +98,9 @@ class UserLogin implements Runnable {
                         if (storedPassword.equals(password)) {
                             UserSession.setLoggedInUser(username);
                             System.out.println("User Logged in successfully");
+                            NotificationCron notificationCron = new NotificationCron();
+                            executorService.execute(notificationCron);
+                            executorService.shutdown();
                         } else {
                             System.out.println("Try Again");
                         }

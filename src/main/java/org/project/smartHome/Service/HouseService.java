@@ -59,7 +59,6 @@ class HouseCreate implements Runnable {
     }
 }
 
-
 @CommandLine.Command(name = "set",
         description = "set the current house",
         mixinStandardHelpOptions = true)
