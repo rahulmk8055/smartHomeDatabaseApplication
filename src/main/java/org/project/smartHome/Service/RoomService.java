@@ -1,7 +1,6 @@
 package org.project.smartHome.Service;
 
 
-import org.project.smartHome.UserSession.AuthenticationException;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 import picocli.CommandLine;

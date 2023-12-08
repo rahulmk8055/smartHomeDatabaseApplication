@@ -1,6 +1,5 @@
 package org.project.smartHome.Crons;
 
-import org.project.smartHome.UserSession.AuthenticationException;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 
@@ -12,7 +11,7 @@ public class NotificationCron implements Runnable{
         try (Connection conn = DataSource.getConnection()) {
             String SQL = "CALL GetUserNotifications(?)";
 
-            while(UserSession.getLoggedInUser()!=null) {
+            while(UserSession.getLoggedInUser()!=null && UserSession.getHouseId()!=0) {
                 Thread.sleep(5000);
 
                 try (CallableStatement pstmt = conn.prepareCall(SQL)) {

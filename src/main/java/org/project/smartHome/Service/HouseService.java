@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import org.project.smartHome.UserSession.AuthenticationException;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 import picocli.CommandLine;
@@ -57,10 +56,6 @@ class HouseCreate implements Runnable {
                 System.out.println(String.format("Exception: %s", e.getMessage()));
                 System.out.println();
         }
-//        catch (AuthenticationException e) {
-//            System.out.println("No user has logged in");
-//        }
-
     }
 }
 
@@ -74,6 +69,7 @@ class HouseSet implements Runnable {
         Scanner scanner = new Scanner(System.in);
 
         List<String> houseList =  getHouseList();
+        System.out.println();
         prettyPrintWithSerialNumbers(houseList);
         System.out.println();
 
@@ -96,7 +92,8 @@ class HouseSet implements Runnable {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(String.format("Exception: %s", e.getMessage()));
+            System.out.println();
         }
     }
 }

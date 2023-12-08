@@ -27,6 +27,7 @@ public class Application {
 
                 System.out.println("Set the House Name");
 
+                // If user is logged in and house is selected, expose the other commands
             } else if(UserSession.getLoggedInUser() != null && UserSession.getHouseId() != 0) {
 
                 Map<String, CommandLine> subcommands = cmd.getSubcommands();
