@@ -1,17 +1,15 @@
 package org.project.smartHome.UserSession;
 
 public class UserSession {
-    private static String loggedInUser = "rmusalay";
-    private static int houseId = 1;
+    private static String loggedInUser;
+    private static int houseId;
+
 
     public static void setLoggedInUser(String username) {
         loggedInUser = username;
     }
 
-    public static String getLoggedInUser() throws AuthenticationException {
-        if (loggedInUser == null){
-            throw new AuthenticationException("No user logged in");
-        }
+    public static String getLoggedInUser() {
         return loggedInUser;
     }
 

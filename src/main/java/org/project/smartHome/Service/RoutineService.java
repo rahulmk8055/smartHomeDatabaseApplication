@@ -70,7 +70,7 @@ class RoutineCreate implements Runnable {
                 System.out.println();
             }
 
-        } catch (SQLException | JsonProcessingException | AuthenticationException e) {
+        } catch (SQLException | JsonProcessingException  e) {
             System.out.println(String.format("Exception: %s", e.getMessage()));
             System.out.println();
         }

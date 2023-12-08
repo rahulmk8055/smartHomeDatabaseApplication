@@ -22,6 +22,7 @@ public class NotificationCron implements Runnable{
 
                     if (rs.next()) {
                         System.out.println();
+                        System.out.println();
                         System.out.println("NOTIFICATION ALERT!!!");
                         System.out.println();
                         do {
@@ -38,7 +39,7 @@ public class NotificationCron implements Runnable{
                 }
             }
 
-        } catch (SQLException | AuthenticationException | InterruptedException e) {
+        } catch (SQLException | InterruptedException e) {
             System.out.println(String.format("Exception: %s", e.getMessage()));
             System.out.println();
         }

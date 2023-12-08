@@ -3,7 +3,6 @@ package org.project.smartHome.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.project.smartHome.Entity.DeviceActions;
-import org.project.smartHome.UserSession.AuthenticationException;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 
@@ -30,6 +29,24 @@ public final class Utils {
         return roomNames;
     }
 
+    public static List<String> getHouseList() {
+        List<String> roomNames = new ArrayList<>();
+        try (Connection conn = DataSource.getConnection()) {
+            String query = "SELECT house_name FROM house WHERE owner = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, UserSession.getLoggedInUser());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while(rs.next()) {
+                        roomNames.add(rs.getString("house_name"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Exception: " + e.getMessage());
+
+        }
+        return roomNames;
+    }
     public static String getValidRoomNameFromUser() {
         Scanner scanner = new Scanner(System.in);
 
@@ -65,9 +82,10 @@ public final class Utils {
         } catch (SQLException e) {
             System.out.println("Exception: " + e.getMessage());
 
-        } catch (AuthenticationException e) {
-            System.out.println("User Not logged In");
         }
+//        catch (AuthenticationException e) {
+//            System.out.println("User Not logged In");
+//        }
         return deviceNames;
     }
 

@@ -3,12 +3,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.project.smartHome.UserSession.AuthenticationException;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 import picocli.CommandLine;
+
+import static org.project.smartHome.Utils.Utils.getHouseList;
+import static org.project.smartHome.Utils.Utils.prettyPrintWithSerialNumbers;
 
 @CommandLine.Command(name = "house",
         mixinStandardHelpOptions = true,
@@ -52,9 +56,10 @@ class HouseCreate implements Runnable {
         } catch (SQLException e) {
                 System.out.println(String.format("Exception: %s", e.getMessage()));
                 System.out.println();
-        } catch (AuthenticationException e) {
-            System.out.println("No user has logged in");
         }
+//        catch (AuthenticationException e) {
+//            System.out.println("No user has logged in");
+//        }
 
     }
 }
@@ -67,6 +72,11 @@ class HouseSet implements Runnable {
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
+
+        List<String> houseList =  getHouseList();
+        prettyPrintWithSerialNumbers(houseList);
+        System.out.println();
+
         System.out.print("Enter house name to set: ");
         String houseName = scanner.nextLine();
 
@@ -85,7 +95,7 @@ class HouseSet implements Runnable {
                     }
                 }
             }
-        } catch (SQLException | AuthenticationException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
