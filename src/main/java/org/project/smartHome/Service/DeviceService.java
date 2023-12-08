@@ -6,14 +6,15 @@ import picocli.CommandLine;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
-import static org.project.smartHome.Utils.Utils.getValidRoomNameFromUser;
+import static org.project.smartHome.Utils.Utils.*;
 
 @CommandLine.Command(name = "device",
         mixinStandardHelpOptions = true,
         description = "Do operations on house",
-        subcommands = {DeviceAdd.class})
+        subcommands = {DeviceAdd.class, DeviceList.class})
 public class DeviceService {
     public static void main(String[] args) {
         CommandLine cmd = new CommandLine(new DeviceService());
@@ -56,6 +57,19 @@ class DeviceAdd implements Runnable {
             System.out.println();
         }
     }
+}
 
 
+@CommandLine.Command(name = "list",
+        mixinStandardHelpOptions = true,
+        description = "list devices")
+class DeviceList implements Runnable {
+
+    @Override
+    public void run() {
+        List<String> devicesList = getDevicesList();
+        for (String device : devicesList) {
+            System.out.println(device);
+        }
+    }
 }

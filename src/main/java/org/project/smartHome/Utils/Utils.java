@@ -1,15 +1,14 @@
 package org.project.smartHome.Utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.project.smartHome.Entity.DeviceActions;
+import org.project.smartHome.UserSession.AuthenticationException;
 import org.project.smartHome.UserSession.UserSession;
 import org.project.smartHome.db.DataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.sql.*;
+import java.util.*;
 
 public final class Utils {
     public static List<String> getRoomsList() {
@@ -51,26 +50,64 @@ public final class Utils {
         return null;
 
     }
-
-
     public static List<String> getDevicesList() {
-        List<String> roomNames = new ArrayList<>();
+        List<String> deviceNames = new ArrayList<>();
         try (Connection conn = DataSource.getConnection()) {
-            String query = "SELECT roomName FROM room WHERE houseId = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, UserSession.getHouseId());
+            String query = "CALL GetUserDevices(?)";
+            try (CallableStatement stmt = conn.prepareCall(query)) {
+                stmt.setString(1, UserSession.getLoggedInUser());
                 try (ResultSet rs = stmt.executeQuery()) {
                     while(rs.next()) {
-                        roomNames.add(rs.getString("roomName"));
+                        deviceNames.add(rs.getString("device_name"));
                     }
                 }
             }
         } catch (SQLException e) {
             System.out.println("Exception: " + e.getMessage());
 
+        } catch (AuthenticationException e) {
+            System.out.println("User Not logged In");
         }
-        return roomNames;
+        return deviceNames;
     }
 
+    public static void prettyPrintWithSerialNumbers(List<String> strings) {
+        if (strings == null || strings.isEmpty()) {
+            System.out.println("The list is empty.");
+            return;
+        }
+
+        int serialNumber = 1;
+        for (String string : strings) {
+            System.out.printf("%d. %s%n", serialNumber++, string);
+        }
+    }
+
+    public static String getActionsDataJson(String input, List<String> deviceList) throws JsonProcessingException {
+        Map<Integer, String> actionsData = extractActionsData(input);
+        List<DeviceActions> actionsJson = new ArrayList<>();
+
+        for (Map.Entry<Integer, String> entry : actionsData.entrySet()) {
+            int index = entry.getKey() - 1;
+            actionsJson.add(new DeviceActions(deviceList.get(index), entry.getValue()));
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.writeValueAsString(actionsJson);
+
+    }
+
+    public static Map<Integer, String> extractActionsData(String input) {
+        Map<Integer, String> dataMap = new HashMap<>();
+        String[] pairs = input.split(",");
+
+        for (String pair : pairs) {
+            String[] keyValue = pair.trim().split(":");
+            Integer key = Integer.parseInt(keyValue[0]);
+            String value = keyValue[1];
+            dataMap.put(key, value);
+        }
+        return dataMap;
+    }
 
 }

@@ -1,9 +1,6 @@
 package org.project.smartHome;
 
-import org.project.smartHome.Service.DeviceService;
-import org.project.smartHome.Service.HouseService;
-import org.project.smartHome.Service.RoomService;
-import org.project.smartHome.Service.UserService;
+import org.project.smartHome.Service.*;
 import picocli.CommandLine;
 
 import java.util.Scanner;
@@ -13,7 +10,7 @@ import java.util.Scanner;
 
 @CommandLine.Command(name = "app", mixinStandardHelpOptions = true,
         description = "A simple CLI application using Picocli.",
-        subcommands = {UserService.class, HouseService.class, RoomService.class, DeviceService.class})
+        subcommands = {UserService.class, HouseService.class, RoomService.class, DeviceService.class, RoutineService.class})
 public class Application {
 
     public static void main(String[] args) {
@@ -22,6 +19,7 @@ public class Application {
 //        ExecutorService executor = Executors.newFixedThreadPool(10);
 
         while (true) {
+            System.out.println();
             System.out.print("Enter command: ");
             String input = scanner.nextLine();
             if ("exit".equalsIgnoreCase(input)) {
