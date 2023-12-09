@@ -11,30 +11,32 @@ public class NotificationCron implements Runnable{
         try (Connection conn = DataSource.getConnection()) {
             String SQL = "CALL GetUserNotifications(?)";
 
-            while(UserSession.getLoggedInUser()!=null && UserSession.getHouseId()!=0) {
+            while(true) {
                 Thread.sleep(5000);
+                if(UserSession.getLoggedInUser()!=null && UserSession.getHouseId()!=0) {
 
-                try (CallableStatement pstmt = conn.prepareCall(SQL)) {
-                    pstmt.setString(1, UserSession.getLoggedInUser());
-                    pstmt.execute();
-                    ResultSet rs = pstmt.getResultSet();
+                    try (CallableStatement pstmt = conn.prepareCall(SQL)) {
+                        pstmt.setString(1, UserSession.getLoggedInUser());
+                        pstmt.execute();
+                        ResultSet rs = pstmt.getResultSet();
 
-                    if (rs.next()) {
-                        System.out.println();
-                        System.out.println();
-                        System.out.println("NOTIFICATION ALERT!!!");
-                        System.out.println();
-                        do {
-                            String routineName = rs.getString("routine_name");
-                            Timestamp notificationTime = rs.getTimestamp("notification_time");
-                            System.out.println(routineName + " has executed @ Time: " + notificationTime);
+                        if (rs.next()) {
                             System.out.println();
-                            // process the result set
-                        } while (rs.next());
-                        System.out.println("PRESS ENTER!! \n");
+                            System.out.println();
+                            System.out.println("NOTIFICATION ALERT!!!");
+                            System.out.println();
+                            do {
+                                String routineName = rs.getString("routine_name");
+                                Timestamp notificationTime = rs.getTimestamp("notification_time");
+                                System.out.println(routineName + " has executed @ Time: " + notificationTime);
+                                System.out.println();
+                                // process the result set
+                            } while (rs.next());
+                            System.out.println("PRESS ENTER!! \n");
+
+                        }
 
                     }
-
                 }
             }
 

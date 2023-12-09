@@ -27,7 +27,6 @@ dependencies {
 }
 
 application {
-//    mainClass = 'org.project.smartHome.Main'
     mainClass = 'org.project.smartHome.Application'
 }
 compileJava {
@@ -46,6 +45,8 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    destinationDirectory.set(file("$rootDir/jars"))
+
 }
 
 
